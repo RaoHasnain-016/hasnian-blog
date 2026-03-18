@@ -1,0 +1,88 @@
+<%
+function catColor(c){const m={'LLMs':'#1d4ed8','Computer Vision':'#6d28d9','AI Agents':'#047857','Reinforcement Learning':'#b45309','NLP':'#b91c1c','Generative AI':'#7c3aed','MLOps':'#0369a1','Node.js':'#15803d','Python':'#1d4ed8','Other':'#475569'};return m[c]||'#475569'}
+function catBg(c){const m={'LLMs':'#dbeafe','Computer Vision':'#ede9fe','AI Agents':'#d1fae5','Reinforcement Learning':'#fef3c7','NLP':'#fee2e2','Generative AI':'#f3e8ff','MLOps':'#e0f2fe','Node.js':'#dcfce7','Python':'#dbeafe','Other':'#f1f5f9'};return m[c]||'#f1f5f9'}
+function catEmoji(c){const m={'LLMs':'🧠','Computer Vision':'👁️','AI Agents':'🤖','Reinforcement Learning':'🎮','NLP':'💬','Generative AI':'🎨','MLOps':'🚀','Node.js':'🟢','Python':'🐍','Other':'📄'};return m[c]||'📄'}
+%>
+<%- include('../partials/header') %>
+
+<div class="page-hero">
+  <div class="ph-inner">
+    <h1 class="ph-title">All Articles</h1>
+    <p class="ph-sub">Deep-dive articles on AI, Machine Learning &amp; Web Development</p>
+    <form action="/blog" method="GET" class="search-form">
+      <div class="sf-row">
+        <div class="sf-input-wrap">
+          <i class="fas fa-search sf-icon"></i>
+          <input class="form-control" type="text" name="search" value="<%= search %>" placeholder="Search articles…"/>
+        </div>
+        <select class="form-control" name="category">
+          <option value="">All Categories</option>
+          <% cats.forEach(c=>{ %>
+            <option value="<%= c %>" <%= category===c?'selected':'' %>><%= c %></option>
+          <% }) %>
+        </select>
+        <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+        <% if(search||category){ %>
+          <a href="/blog" class="btn btn-outline"><i class="fas fa-times"></i> Clear</a>
+        <% } %>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="cat-strip">
+  <div class="cat-strip-inner">
+    <a href="/blog" class="cat-chip <%= !category?'active':'' %>">All</a>
+    <% cats.forEach(c=>{ %>
+      <a href="/blog?category=<%= encodeURIComponent(c) %>" class="cat-chip <%= category===c?'active':'' %>"><%= c %></a>
+    <% }) %>
+  </div>
+</div>
+
+<div class="container">
+  <% if(posts.length===0){ %>
+    <div class="empty-box" style="margin:3rem auto">
+      <div class="eb-icon">📭</div>
+      <h3>No articles found</h3>
+      <p>Try a different search or category.</p>
+      <a href="/blog" class="btn btn-primary" style="margin-top:1rem">Clear filters</a>
+    </div>
+  <% } else { %>
+    <div class="posts-grid">
+      <% posts.forEach(p=>{ %>
+      <a href="/blog/<%= p._id %>" class="post-card">
+        <div class="pc-top" style="background:<%= catBg(p.category) %>">
+          <span><%= catEmoji(p.category) %></span>
+          <% if(p.image){ %><img src="/uploads/<%= p.image %>" class="fp-img" alt=""/><% } %>
+        </div>
+        <div class="pc-body">
+          <span class="cat-tag" style="background:<%= catBg(p.category) %>;color:<%= catColor(p.category) %>"><%= p.category %></span>
+          <h3 class="pc-title"><%= p.title %></h3>
+          <p class="pc-exc"><%= (p.excerpt||'').substring(0,100) %>…</p>
+          <div class="fp-meta">
+            <div class="fp-author">
+              <div class="fp-av"><%= p.author.username.charAt(0).toUpperCase() %></div>
+              <span><%= p.author.username %></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.6rem">
+              <span class="pc-views"><i class="fas fa-eye"></i> <%= p.views %></span>
+              <span class="fp-date"><%= new Date(p.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'}) %></span>
+            </div>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+
+    <% if(totalPages>1){ %>
+    <div class="pagination">
+      <% for(let i=1;i<=totalPages;i++){ %>
+        <a href="/blog?page=<%= i %>&category=<%= encodeURIComponent(category) %>&search=<%= encodeURIComponent(search) %>"
+           class="pg-btn <%= currentPage===i?'active':'' %>"><%= i %></a>
+      <% } %>
+    </div>
+    <% } %>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

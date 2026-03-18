@@ -1,0 +1,77 @@
+<%- include('../partials/header') %>
+<div class="dash-layout">
+  <%- include('./sidebar') %>
+  <div class="dash-main">
+    <div class="dash-topbar">
+      <h1><i class="fas fa-edit"></i> Edit Post</h1>
+      <a href="/dashboard" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+
+    <% if(errors.length>0){ %>
+      <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i><ul><% errors.forEach(e=>{%><li><%=e.msg%></li><%})%></ul></div>
+    <% } %>
+
+    <form action="/dashboard/posts/<%= post._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="post-form">
+      <div class="form-row-2">
+        <div class="fg">
+          <label class="flabel">Title <span class="req">*</span></label>
+          <input class="finput" style="padding:.62rem .9rem" type="text" name="title" value="<%=post.title%>" required/>
+        </div>
+        <div class="fg">
+          <label class="flabel">Category <span class="req">*</span></label>
+          <select class="finput" style="padding:.62rem .9rem" name="category" required>
+            <% cats.forEach(c=>{ %><option value="<%=c%>" <%=post.category===c?'selected':''%>><%=c%></option><% }) %>
+          </select>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="flabel">Content <span class="req">*</span> <span class="opt">— WYSIWYG Editor</span></label>
+        <textarea id="content" name="content" class="finput" style="padding:.62rem .9rem" rows="16"><%- post.content %></textarea>
+      </div>
+
+      <div class="form-row-2">
+        <div class="fg">
+          <label class="flabel">Tags <span class="opt">(comma-separated)</span></label>
+          <input class="finput" style="padding:.62rem .9rem" type="text" name="tags" value="<%=(post.tags||[]).join(', ')%>"/>
+        </div>
+        <div class="fg">
+          <label class="flabel">Status</label>
+          <select class="finput" style="padding:.62rem .9rem" name="status">
+            <option value="published" <%=post.status==='published'?'selected':''%>>Published</option>
+            <option value="draft" <%=post.status==='draft'?'selected':''%>>Draft</option>
+          </select>
+        </div>
+      </div>
+
+      <% if(post.image){ %>
+        <div class="fg">
+          <label class="flabel">Current Image</label>
+          <div style="border-radius:8px;overflow:hidden;max-height:150px;border:1px solid var(--border);margin-bottom:.6rem">
+            <img src="/uploads/<%=post.image%>" style="width:100%;max-height:150px;object-fit:cover" alt="Current"/>
+          </div>
+        </div>
+      <% } %>
+
+      <div class="fg">
+        <label class="flabel"><%=post.image?'Replace Image':'Featured Image'%> <span class="opt">(JPEG/PNG/GIF/WebP — max 5MB)</span></label>
+        <input class="finput" style="padding:.62rem .9rem" type="file" name="image" accept="image/jpeg,image/png,image/gif,image/webp" onchange="previewImg(this)"/>
+        <div id="imgPreview" style="display:none;margin-top:.6rem;border-radius:8px;overflow:hidden;max-height:180px;border:1px solid var(--border)">
+          <img id="imgPreviewEl" src="" style="width:100%;max-height:180px;object-fit:cover" alt="Preview"/>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a href="/dashboard" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+tinymce.init({selector:'#content',plugins:'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',toolbar:'undo redo | blocks fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',height:420,menubar:false,branding:false,promotion:false});
+function previewImg(i){const p=document.getElementById('imgPreview'),el=document.getElementById('imgPreviewEl');if(i.files&&i.files[0]){const r=new FileReader();r.onload=e=>{el.src=e.target.result;p.style.display='block';};r.readAsDataURL(i.files[0]);}else p.style.display='none';}
+</script>
+<%- include('../partials/footer') %>

@@ -1,0 +1,56 @@
+<%- include('../partials/header') %>
+<div class="dash-layout">
+  <%- include('./sidebar') %>
+  <div class="dash-main">
+    <div class="dash-topbar"><h1><i class="fas fa-user-circle"></i> Profile</h1></div>
+
+    <div class="profile-grid">
+      <div class="card profile-card">
+        <div class="prof-av"><%= user.username.charAt(0).toUpperCase() %></div>
+        <h2 class="prof-name"><%= user.username %></h2>
+        <p class="prof-info"><i class="fas fa-envelope"></i> <%= user.email %></p>
+        <p class="prof-info"><i class="fas fa-calendar-alt"></i> Joined <%= new Date(user.createdAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) %></p>
+        <% if(user.bio){ %><p class="prof-bio"><%= user.bio %></p><% } %>
+        <div class="prof-stats">
+          <div><span class="ps-n"><%= posts.length %></span><span class="ps-l">Posts</span></div>
+          <div><span class="ps-n"><%= posts.filter(p=>p.status==='published').length %></span><span class="ps-l">Published</span></div>
+          <div><span class="ps-n"><%= posts.reduce((s,p)=>s+p.views,0) %></span><span class="ps-l">Views</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-h"><i class="fas fa-database"></i> MongoDB User Document</h3>
+        <div class="schema-box">
+          <pre>{
+  "_id":       "<%= user._id %>",
+  "username":  "<%= user.username %>",
+  "email":     "<%= user.email %>",
+  "password":  "bcrypt hash (10 rounds)",
+  "bio":       "<%= user.bio||'' %>",
+  "createdAt": "<%= user.createdAt %>",
+  "updatedAt": "<%= user.updatedAt %>"
+}</pre>
+        </div>
+
+        <h3 class="card-h" style="margin-top:1.5rem"><i class="fas fa-project-diagram"></i> Schema Relationship (.populate)</h3>
+        <div class="schema-box">
+          <pre>Post.author  →  ObjectId ref  →  User
+// .populate('author','username bio')
+// Replaces ObjectId with full User document</pre>
+        </div>
+
+        <h3 class="card-h" style="margin-top:1.5rem"><i class="fas fa-shield-alt"></i> Security Features</h3>
+        <ul class="sec-list">
+          <li><i class="fas fa-check" style="color:#16a34a"></i> bcrypt password hashing (10 salt rounds)</li>
+          <li><i class="fas fa-check" style="color:#16a34a"></i> Sessions stored in MongoDB via connect-mongo</li>
+          <li><i class="fas fa-check" style="color:#16a34a"></i> requireAuth middleware on all /dashboard routes</li>
+          <li><i class="fas fa-check" style="color:#16a34a"></i> express-validator on all form inputs</li>
+          <li><i class="fas fa-check" style="color:#16a34a"></i> Image MIME type + size validation middleware</li>
+          <li><i class="fas fa-check" style="color:#16a34a"></i> Ownership check before edit / delete</li>
+          <li><i class="fas fa-check" style="color:#16a34a"></i> Environment variables for Vercel deployment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

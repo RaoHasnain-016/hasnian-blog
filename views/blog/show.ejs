@@ -1,0 +1,117 @@
+<%
+function catColor(c){const m={'LLMs':'#1d4ed8','Computer Vision':'#6d28d9','AI Agents':'#047857','Reinforcement Learning':'#b45309','NLP':'#b91c1c','Generative AI':'#7c3aed','MLOps':'#0369a1','Node.js':'#15803d','Python':'#1d4ed8','Other':'#475569'};return m[c]||'#475569'}
+function catBg(c){const m={'LLMs':'#dbeafe','Computer Vision':'#ede9fe','AI Agents':'#d1fae5','Reinforcement Learning':'#fef3c7','NLP':'#fee2e2','Generative AI':'#f3e8ff','MLOps':'#e0f2fe','Node.js':'#dcfce7','Python':'#dbeafe','Other':'#f1f5f9'};return m[c]||'#f1f5f9'}
+function catEmoji(c){const m={'LLMs':'🧠','Computer Vision':'👁️','AI Agents':'🤖','Reinforcement Learning':'🎮','NLP':'💬','Generative AI':'🎨','MLOps':'🚀','Node.js':'🟢','Python':'🐍','Other':'📄'};return m[c]||'📄'}
+%>
+<%- include('../partials/header') %>
+
+<div class="container" style="max-width:1100px">
+  <a href="/blog" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+</div>
+
+<div class="post-page">
+  <div class="pp-inner">
+
+    <!-- Hero -->
+    <div class="pp-hero">
+      <% if(post.image){ %>
+        <img src="/uploads/<%= post.image %>" alt="<%= post.title %>"/>
+      <% } else { %>
+        <div class="pp-hero-fallback" style="background:<%= catBg(post.category) %>">
+          <span><%= catEmoji(post.category) %></span>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="pp-layout">
+      <!-- Main -->
+      <div class="pp-main">
+        <span class="cat-tag" style="background:<%= catBg(post.category) %>;color:<%= catColor(post.category) %>">
+          <%= post.category %>
+        </span>
+        <h1 class="pp-title"><%= post.title %></h1>
+
+        <div class="pp-meta">
+          <div class="fp-author" style="gap:.6rem">
+            <div class="fp-av" style="width:34px;height:34px;font-size:.9rem"><%= post.author.username.charAt(0).toUpperCase() %></div>
+            <div>
+              <div style="font-weight:600;color:var(--text-primary);font-size:.88rem"><%= post.author.username %></div>
+              <div style="font-size:.72rem;color:var(--text-muted)">Author</div>
+            </div>
+          </div>
+          <div class="pp-meta-right">
+            <span><i class="fas fa-calendar-alt"></i> <%= new Date(post.createdAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) %></span>
+            <span><i class="fas fa-eye"></i> <%= post.views %> views</span>
+            <span class="status-badge status-<%= post.status %>"><%= post.status %></span>
+          </div>
+        </div>
+
+        <% if(post.tags && post.tags.length>0){ %>
+          <div class="pp-tags">
+            <% post.tags.forEach(t=>{ %><span class="pp-tag">#<%= t %></span><% }) %>
+          </div>
+        <% } %>
+
+        <div class="pp-body"><%- post.content %></div>
+
+        <!-- Author box -->
+        <div class="author-box">
+          <div class="fp-av" style="width:52px;height:52px;font-size:1.3rem;flex-shrink:0">
+            <%= post.author.username.charAt(0).toUpperCase() %>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:.95rem;margin-bottom:.3rem"><%= post.author.username %></div>
+            <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6">
+              <%= post.author.bio || 'AI Engineer & Full Stack Developer — COMSATS University Islamabad.' %>
+            </p>
+          </div>
+        </div>
+
+        <% if(user && user._id.toString()===post.author._id.toString()){ %>
+          <div class="owner-actions">
+            <a href="/dashboard/posts/<%= post._id %>/edit" class="btn btn-outline"><i class="fas fa-edit"></i> Edit</a>
+            <form action="/dashboard/posts/<%= post._id %>?_method=DELETE" method="POST"
+              onsubmit="return confirm('Delete this post permanently?')">
+              <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+            </form>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="pp-sidebar">
+        <% if(related.length>0){ %>
+          <h3 class="sidebar-h">Related Posts</h3>
+          <% related.forEach(r=>{ %>
+          <a href="/blog/<%= r._id %>" class="rel-card">
+            <div class="rel-img" style="background:<%= catBg(r.category) %>">
+              <span><%= catEmoji(r.category) %></span>
+              <% if(r.image){ %><img src="/uploads/<%= r.image %>" class="fp-img" alt=""/><% } %>
+            </div>
+            <div>
+              <p class="rel-title"><%= r.title %></p>
+              <span class="rel-auth"><%= r.author.username %></span>
+            </div>
+          </a>
+          <% }) %>
+        <% } %>
+
+        <div class="sidebar-cta">
+          <h4>Write an Article</h4>
+          <p>Share your knowledge with the community.</p>
+          <% if(user){ %>
+            <a href="/dashboard/posts/new" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:.6rem">
+              <i class="fas fa-plus"></i> New Post
+            </a>
+          <% } else { %>
+            <a href="/register" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:.6rem">
+              <i class="fas fa-user-plus"></i> Get Started
+            </a>
+          <% } %>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

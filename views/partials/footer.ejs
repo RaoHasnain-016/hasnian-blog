@@ -1,0 +1,69 @@
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">✦ Hasnain<span>.</span>Blog</div>
+      <p>In-depth articles on AI, Machine Learning, and modern web development. Built with Node.js, Express &amp; MongoDB.</p>
+      <div class="footer-tech">
+        <span>Node.js</span><span>Express</span><span>MongoDB</span><span>EJS</span><span>Vercel</span>
+      </div>
+    </div>
+
+    <div>
+      <h4>Topics</h4>
+      <div class="footer-links">
+        <a href="/blog?category=LLMs">Large Language Models</a>
+        <a href="/blog?category=Computer+Vision">Computer Vision</a>
+        <a href="/blog?category=AI+Agents">AI Agents</a>
+        <a href="/blog?category=Generative+AI">Generative AI</a>
+        <a href="/blog?category=MLOps">MLOps</a>
+        <a href="/blog?category=Node.js">Node.js</a>
+      </div>
+    </div>
+
+    <div>
+      <h4>Navigation</h4>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/blog">All Articles</a>
+        <% if(user){ %>
+          <a href="/dashboard">Dashboard</a>
+          <a href="/dashboard/posts/new">Write Post</a>
+          <a href="/dashboard/profile">Profile</a>
+        <% } else { %>
+          <a href="/register">Register</a>
+          <a href="/login">Login</a>
+        <% } %>
+      </div>
+    </div>
+
+    <div>
+      <h4>Assignment</h4>
+      <div class="footer-links">
+        <a href="#">CSC337 — Advanced Web</a>
+        <a href="#">COMSATS Vehari Campus</a>
+        <a href="#">Instructor: Yasmeen Jana</a>
+        <a href="#">Spring 2026</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>&copy; <%= new Date().getFullYear() %> Hasnain — All rights reserved</span>
+    <span>Deployed on <a href="https://vercel.com" target="_blank" style="color:var(--accent)">Vercel</a></span>
+  </div>
+</footer>
+
+<script>
+const hb = document.getElementById('hamburger');
+const mm = document.getElementById('mobMenu');
+if(hb && mm){
+  hb.addEventListener('click', () => {
+    mm.classList.toggle('open');
+    hb.classList.toggle('open');
+  });
+}
+</script>
+</body>
+</html>

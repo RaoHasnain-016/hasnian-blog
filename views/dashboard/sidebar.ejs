@@ -1,0 +1,17 @@
+<aside class="dash-sidebar">
+  <div class="ds-user">
+    <div class="ds-av"><%= user.username.charAt(0).toUpperCase() %></div>
+    <div><strong><%= user.username %></strong><span><%= user.email %></span></div>
+  </div>
+  <nav class="ds-nav">
+    <a href="/dashboard"           class="ds-link <%= title==='Dashboard'?'active':'' %>"><i class="fas fa-tachometer-alt"></i> Overview</a>
+    <a href="/dashboard/posts/new" class="ds-link <%= title==='New Post'?'active':'' %>"><i class="fas fa-plus-circle"></i> New Post</a>
+    <a href="/dashboard/profile"   class="ds-link <%= title==='Profile'?'active':'' %>"><i class="fas fa-user-circle"></i> Profile</a>
+    <hr class="ds-hr"/>
+    <a href="/"    class="ds-link"><i class="fas fa-home"></i> Home</a>
+    <a href="/blog" class="ds-link"><i class="fas fa-newspaper"></i> Blog</a>
+    <form action="/logout" method="POST">
+      <button class="ds-link ds-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </form>
+  </nav>
+</aside>

@@ -1,0 +1,8 @@
+<%- include('partials/header') %>
+<div class="error-page">
+  <div class="ep-num" style="color:#dc2626">⚠</div>
+  <h2><%= title||'Something went wrong' %></h2>
+  <p><%= message||'An unexpected error occurred.' %></p>
+  <a href="/" class="btn btn-primary" style="margin-top:1.5rem"><i class="fas fa-home"></i> Go Home</a>
+</div>
+<%- include('partials/footer') %>

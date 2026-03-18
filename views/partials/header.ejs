@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title><%= title %> — Hasnain Blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="logo-icon">✦</span>
+      Hasnain<span class="logo-dot">.</span>Blog
+    </a>
+
+    <div class="nav-center">
+      <a href="/"    class="nav-link">Home</a>
+      <a href="/blog" class="nav-link">Articles</a>
+      <% if(user){ %><a href="/dashboard" class="nav-link">Dashboard</a><% } %>
+    </div>
+
+    <div class="nav-right">
+      <% if(user){ %>
+        <div class="nav-user">
+          <div class="nav-av"><%= user.username.charAt(0).toUpperCase() %></div>
+          <span><%= user.username %></span>
+        </div>
+        <form action="/logout" method="POST">
+          <button class="btn btn-sm btn-ghost">Logout</button>
+        </form>
+      <% } else { %>
+        <a href="/login"    class="btn btn-sm btn-ghost">Login</a>
+        <a href="/register" class="btn btn-sm btn-primary">Get Started</a>
+      <% } %>
+    </div>
+
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <a href="/"    class="mob-link">Home</a>
+  <a href="/blog" class="mob-link">Articles</a>
+  <% if(user){ %>
+    <a href="/dashboard" class="mob-link">Dashboard</a>
+    <form action="/logout" method="POST"><button class="mob-link" style="width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit">Logout</button></form>
+  <% } else { %>
+    <a href="/login"    class="mob-link">Login</a>
+    <a href="/register" class="mob-link">Register</a>
+  <% } %>
+</div>
+
+<main>

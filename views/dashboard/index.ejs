@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+<div class="dash-layout">
+  <%- include('./sidebar') %>
+  <div class="dash-main">
+    <div class="dash-topbar">
+      <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+      <a href="/dashboard/posts/new" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> New Post</a>
+    </div>
+
+    <% if(flash){ %>
+      <div class="alert alert-<%= flash.type %>">
+        <i class="fas fa-<%= flash.type==='success'?'check-circle':'exclamation-circle' %>"></i>
+        <%= flash.msg %>
+      </div>
+    <% } %>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="sc-icon"><i class="fas fa-file-alt"></i></div><div><div class="sc-num"><%=stats.total%></div><div class="sc-lbl">Total Posts</div></div></div>
+      <div class="stat-card"><div class="sc-icon sc-green"><i class="fas fa-globe"></i></div><div><div class="sc-num"><%=stats.published%></div><div class="sc-lbl">Published</div></div></div>
+      <div class="stat-card"><div class="sc-icon sc-amber"><i class="fas fa-pencil-alt"></i></div><div><div class="sc-num"><%=stats.drafts%></div><div class="sc-lbl">Drafts</div></div></div>
+      <div class="stat-card"><div class="sc-icon sc-blue"><i class="fas fa-eye"></i></div><div><div class="sc-num"><%=stats.views%></div><div class="sc-lbl">Total Views</div></div></div>
+    </div>
+
+    <div class="table-card">
+      <div class="tc-hdr"><h2><i class="fas fa-list"></i> My Posts</h2></div>
+      <% if(posts.length===0){ %>
+        <div class="empty-box" style="padding:2.5rem">
+          <div class="eb-icon">✍️</div>
+          <h3>No posts yet</h3>
+          <p>Write your first article!</p>
+          <a href="/dashboard/posts/new" class="btn btn-primary" style="margin-top:1rem">Create Post</a>
+        </div>
+      <% } else { %>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Views</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody>
+              <% posts.forEach(p=>{ %>
+              <tr>
+                <td><a href="/blog/<%=p._id%>" target="_blank" class="tbl-link"><%=p.title.length>50?p.title.substring(0,50)+'…':p.title%></a></td>
+                <td><span class="tbl-cat"><%=p.category%></span></td>
+                <td><span class="status-badge status-<%=p.status%>"><%=p.status%></span></td>
+                <td><%=p.views%></td>
+                <td><%=new Date(p.createdAt).toLocaleDateString()%></td>
+                <td>
+                  <div class="tbl-actions">
+                    <a href="/dashboard/posts/<%=p._id%>/edit" class="btn btn-sm btn-outline" title="Edit"><i class="fas fa-edit"></i></a>
+                    <form action="/dashboard/posts/<%=p._id%>?_method=DELETE" method="POST" style="display:inline" onsubmit="return confirm('Delete this post?')">
+                      <button type="submit" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
